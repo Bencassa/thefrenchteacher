@@ -260,7 +260,16 @@ footer a{color:var(--gold);text-decoration:none;}
 .reco-link{font-size:.65rem;font-weight:700;letter-spacing:.5px;text-transform:uppercase;color:var(--gold);text-decoration:none;border:1px solid var(--gold);border-radius:3px;padding:.2rem .5rem;white-space:nowrap;flex-shrink:0;}
 .reco-link:hover{background:var(--gold);color:var(--navy);}
 @media(max-width:900px){.reco-cols{grid-template-columns:1fr 1fr;}}
-@media(max-width:600px){.reco-cols{grid-template-columns:1fr;}}
+/* Onglets recommandations mobile */
+.reco-tabs{display:flex;gap:.5rem;margin-bottom:1.5rem;}
+.reco-tab-btn{background:transparent;border:1.5px solid rgba(26,39,68,.2);border-radius:20px;padding:.3rem .9rem;font-size:.78rem;font-weight:700;letter-spacing:.5px;color:var(--navy);cursor:pointer;transition:all .2s;}
+.reco-tab-btn:hover{border-color:var(--gold);color:var(--gold);}
+.reco-tab-btn.active{background:var(--navy);border-color:var(--navy);color:var(--white);}
+.reco-tab-panel{display:none;}
+.reco-tab-panel.active{display:grid;grid-template-columns:repeat(3,1fr);gap:1.25rem;align-items:start;}
+.reco-cols{display:none!important;}
+@media(max-width:900px){.reco-tab-panel.active{grid-template-columns:repeat(2,1fr);}}
+@media(max-width:600px){.reco-tab-panel.active{grid-template-columns:1fr;}}
 @media(max-width:600px){.page-header{padding:3rem 1.25rem 5rem;}.page-header h1{font-size:1.8rem;}.hero h1{font-size:2rem;}}
 @media(max-width:600px){.fin-grid{grid-template-columns:1fr!important;}}
 @media(max-width:600px){#ap-card{flex-direction:column;align-items:center;text-align:center;}}
@@ -1398,7 +1407,7 @@ footer a{color:var(--gold);text-decoration:none;}
 
     <!-- FILTRES NIVEAU -->
     <div style="display:flex;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;align-items:center;">
-      <span style="font-size:.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-right:.5rem;" id="tr-res-filter">Filtrer par niveau</span>
+      <span style="font-size:.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-right:.5rem;" id="tr-res-filter">Filtrer par niveaux :</span>
       <button class="res-filter active" data-filter="all" id="tr-res-f-all">Tous</button>
       <button class="res-filter" data-filter="a1a2" id="tr-res-f-a1a2">A1–A2</button>
       <button class="res-filter" data-filter="b1b2" id="tr-res-f-b1b2">B1–B2</button>
@@ -1850,6 +1859,19 @@ footer a{color:var(--gold);text-decoration:none;}
   </div>
   <section style="padding:3rem 2rem;max-width:1100px;margin:0 auto;">
     <p id="tr-reco-intro" style="font-family:'Playfair Display',serif;font-size:1.05rem;color:var(--text-muted);line-height:1.8;margin-bottom:2.5rem;text-align:center;max-width:680px;margin-left:auto;margin-right:auto;"></p>
+
+    <!-- Onglets style Ressources -->
+    <div class="reco-tabs" id="reco-tabs" style="align-items:center;flex-wrap:wrap;gap:.5rem;margin-bottom:2rem;">
+      <span style="font-size:.78rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--navy);margin-right:.5rem;" id="tr-reco-filter-lbl">Filtrer par catégorie :</span>
+      <button class="reco-tab-btn active" id="reco-tab-tous" onclick="switchRecoTab('tous')">Tous</button>
+      <button class="reco-tab-btn" id="reco-tab-adultes" onclick="switchRecoTab('adultes')">Adultes</button>
+      <button class="reco-tab-btn" id="reco-tab-ados" onclick="switchRecoTab('ados')">Adolescents</button>
+    </div>
+    <div class="reco-tab-panel active" id="reco-panel-tous"></div>
+    <div class="reco-tab-panel" id="reco-panel-adultes"></div>
+    <div class="reco-tab-panel" id="reco-panel-ados"></div>
+
+    <!-- Grille desktop -->
     <div class="reco-cols" id="reco-cols">
       <div class="reco-col" id="reco-col-adulte1"><div class="reco-col-title" id="tr-reco-adultes">Adultes</div></div>
       <div class="reco-col" id="reco-col-adulte2"><div class="reco-col-title" style="visibility:hidden;">Adultes</div></div>
@@ -2035,6 +2057,8 @@ const T = {
     reco_voir: 'Voir la lettre',
     reco_adultes: 'Adultes',
     reco_ados: 'Adolescents',
+    reco_tous: 'Tous',
+    reco_filter_lbl: 'Filtrer par catégorie :',
     recos: [
       // ===== ADULTES =====
       { cat: 'adulte', nom: 'Patrick Hildebrand', org: 'Eurocorps, Strasbourg', org_en: 'Eurocorps, Strasbourg', fichier: 'hildebrand_patrick.pdf',
@@ -2457,7 +2481,7 @@ const T = {
     // PAGE RESSOURCES
     res_h1: 'Ressources pédagogiques',
     res_sub: 'Une sélection rigoureuse de ressources gratuites et d\'examens officiels — choisies pour leur qualité pédagogique et leur adéquation avec les niveaux du CECRL.',
-    res_filter: 'Filtrer par niveau',
+    res_filter: 'Filtrer par niveaux :',
     res_f_all: 'Tous',
     res_f_examen: 'Examens',
     res_visit: 'Visiter →',
@@ -2531,6 +2555,8 @@ const T = {
     reco_voir: 'Read the letter',
     reco_adultes: 'Adults',
     reco_ados: 'Teenagers',
+    reco_tous: 'All',
+    reco_filter_lbl: 'Filter by category:',
 
     hero_h1: 'Learn French<br>with method and passion',
     hero_sub: 'Develop your skills, transform your potential',
@@ -2821,7 +2847,7 @@ const T = {
     // PAGE RESSOURCES
     res_h1: 'Learning resources',
     res_sub: 'A rigorous selection of free resources and official exams — chosen for their pedagogical quality and alignment with CEFR levels.',
-    res_filter: 'Filter by level',
+    res_filter: 'Filter by level:',
     res_f_all: 'All',
     res_f_examen: 'Exams',
     res_visit: 'Visit →',
@@ -3146,10 +3172,18 @@ function renderAll() {
   const elRecoIntro = document.getElementById('tr-reco-intro'); if(elRecoIntro) elRecoIntro.innerHTML = t('reco_intro');
   const elRecoAdultes = document.getElementById('tr-reco-adultes'); if(elRecoAdultes) elRecoAdultes.innerHTML = t('reco_adultes');
   const elRecoAdos = document.getElementById('tr-reco-ados'); if(elRecoAdos) elRecoAdos.innerHTML = t('reco_ados');
+  // Boutons onglets
+  const tabTous = document.getElementById('reco-tab-tous'); if(tabTous) tabTous.innerHTML = t('reco_tous');
+  const tabAdultes = document.getElementById('reco-tab-adultes'); if(tabAdultes) tabAdultes.innerHTML = t('reco_adultes');
+  const tabAdos = document.getElementById('reco-tab-ados'); if(tabAdos) tabAdos.innerHTML = t('reco_ados');
+  const elFilterLbl = document.getElementById('tr-reco-filter-lbl'); if(elFilterLbl) elFilterLbl.innerHTML = t('reco_filter_lbl');
   const col1 = document.getElementById('reco-col-adulte1');
   const col2 = document.getElementById('reco-col-adulte2');
   const colAdo = document.getElementById('reco-col-ado');
-  if(col1 && col2 && colAdo) {
+  const panelTous = document.getElementById('reco-panel-tous');
+  const panelAdultes = document.getElementById('reco-panel-adultes');
+  const panelAdos = document.getElementById('reco-panel-ados');
+  if(panelTous) {
     const recos = T.fr.recos;
     const basePath = '';
     const lbl = t('reco_voir');
@@ -3159,19 +3193,20 @@ function renderAll() {
       const quote = L === 'en' ? r.en : r.fr;
       const org = L === 'en' ? (r.org_en || r.org) : r.org;
       return `<div class="reco-card">
-        <div class="reco-quote">${quote}</div>
+        <div class="reco-quote">${quote}\u201D</div>
         <div class="reco-footer">
           <div><div class="reco-name">${r.nom}</div><div class="reco-org">${org}</div></div>
           <a class="reco-link" href="${basePath}${r.fichier}" target="_blank" rel="noopener">${lbl}</a>
         </div>
       </div>`;
     };
-    const titleAdultes = `<div class="reco-col-title" id="tr-reco-adultes">${t('reco_adultes')}</div>`;
-    const titleAdultesHidden = `<div class="reco-col-title" style="visibility:hidden;">${t('reco_adultes')}</div>`;
-    const titleAdos = `<div class="reco-col-title" id="tr-reco-ados">${t('reco_ados')}</div>`;
-    col1.innerHTML = titleAdultes + adultes.filter((_,i) => i % 2 === 0).map(makeCard).join('');
-    col2.innerHTML = titleAdultesHidden + adultes.filter((_,i) => i % 2 === 1).map(makeCard).join('');
-    colAdo.innerHTML = titleAdos + ados.map(makeCard).join('');
+    panelTous.innerHTML = recos.map(makeCard).join('');
+    if(panelAdultes) panelAdultes.innerHTML = adultes.map(makeCard).join('');
+    if(panelAdos) panelAdos.innerHTML = ados.map(makeCard).join('');
+    // Desktop colonnes (masquées mais gardées pour compatibilité)
+    if(col1) { const titleAdultes = `<div class="reco-col-title">${t('reco_adultes')}</div>`; col1.innerHTML = titleAdultes + adultes.filter((_,i)=>i%2===0).map(makeCard).join(''); }
+    if(col2) { col2.innerHTML = `<div class="reco-col-title" style="visibility:hidden;">${t('reco_adultes')}</div>` + adultes.filter((_,i)=>i%2===1).map(makeCard).join(''); }
+    if(colAdo) { colAdo.innerHTML = `<div class="reco-col-title">${t('reco_ados')}</div>` + ados.map(makeCard).join(''); }
   }
 
   // CONTACT
@@ -3371,6 +3406,16 @@ document.querySelectorAll('.domaine-card').forEach(card => {
     }
   });
 });
+
+// ===== ONGLETS RECOMMANDATIONS =====
+function switchRecoTab(tab) {
+  ['tous','adultes','ados'].forEach(t => {
+    const panel = document.getElementById('reco-panel-' + t);
+    const btn = document.getElementById('reco-tab-' + t);
+    if(panel) panel.classList.toggle('active', t === tab);
+    if(btn) btn.classList.toggle('active', t === tab);
+  });
+}
 
 // ===== FICHES COURS =====
 document.querySelectorAll('.fiche .fiche-header').forEach(header => {
